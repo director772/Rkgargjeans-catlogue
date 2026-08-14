@@ -83,7 +83,11 @@ background:var(--brass);opacity:.85;box-shadow:0 0 0 2px rgba(0,0,0,.15);}
 .brand-tag{font-size:10px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;padding:2px 8px;
 border-radius:5px;background:rgba(255,255,255,.06);}
 .category-txt{font-size:11.5px;color:var(--text-muted);}
-.card-moq{display:inline-flex;align-items:center;gap:4px;margin-top:9px;font-size:10.5px;font-weight:600;
+.card-meta{font-size:11.5px;color:var(--text-muted);}
+.card-price{font-family:"Oswald";font-size:15px;font-weight:600;color:var(--text);margin-top:8px;}
+.card-price span{font-size:11px;font-weight:500;color:var(--text-muted);margin-left:5px;}
+.card-sizes{font-size:11px;color:var(--text-muted);margin-top:4px;}
+.card-moq{display:inline-flex;align-items:center;gap:4px;margin-top:6px;font-size:10.5px;font-weight:600;
 color:var(--brass);letter-spacing:.02em;}
 .card-moq::before{content:"";width:5px;height:5px;border-radius:50%;background:var(--brass);}
 
@@ -142,6 +146,13 @@ border:2px solid var(--border-light);flex-shrink:0;padding:4px;transition:border
 border-radius:8px;padding:7px 13px;font-size:12.5px;font-weight:500;transition:all .15s;}
 .swatch:hover{border-color:var(--denim-light);}
 .swatch.active{border-color:var(--brass);color:var(--brass);background:rgba(204,158,86,.08);font-weight:600;}
+.color-chip.excluded{opacity:.45;text-decoration:line-through;border-style:dashed;background:transparent;}
+.set-summary{margin-top:16px;background:var(--panel-2);border:1px solid var(--border-light);border-radius:10px;
+padding:12px 14px;display:flex;flex-direction:column;gap:7px;}
+.set-summary > div{display:flex;justify-content:space-between;font-size:12.5px;color:var(--text-muted);}
+.set-summary b{color:var(--text);font-weight:600;font-family:"Oswald";}
+.set-summary-total{border-top:1px dashed var(--border-light);padding-top:8px;margin-top:2px;}
+.set-summary-total span, .set-summary-total b{color:var(--brass) !important;font-size:14px;}
 .qty-row{display:flex;align-items:center;gap:14px;margin-top:22px;}
 .qty-btn{width:38px;height:38px;border-radius:10px;border:1px solid var(--border-light);background:var(--panel-2);
 color:var(--text);font-size:18px;font-weight:700;transition:border-color .15s;}
@@ -224,8 +235,8 @@ let categoryFilter = "All";
 let cart = [];
 let activeProduct = null;
 let activeImgIdx = 0;
-let activeColor = "";
-let activeQty = 1;
+let activeExcludedColors = [];   // colors the party has removed from the full set
+let activeSets = 1;              // number of sets being ordered
 let mobile = "";
 let firmName = "";
 
@@ -342,6 +353,8 @@ function renderGrid() {
           ${p.brand ? `<span class="brand-tag" style="color:${brandColor(p.brand)}">${escapeHtml(p.brand)}</span>` : ""}
           ${p.category ? `<span class="category-txt">${escapeHtml(p.category)}</span>` : ""}
         </div>
+        ${p.price ? `<div class="card-price">₹${escapeHtml(p.price)}<span>/ pc</span></div>` : ""}
+        ${p.sizes ? `<div class="card-sizes">Sizes: ${escapeHtml(p.sizes)}</div>` : ""}
         ${p.moq ? `<span class="card-moq">MOQ ${escapeHtml(p.moq)}</span>` : ""}
       </div>
     </button>
@@ -356,14 +369,19 @@ function openProduct(sku) {
   activeProduct = products.find(p => p.sku === sku);
   if (!activeProduct) return;
   activeImgIdx = 0;
-  activeColor = (activeProduct.colors && activeProduct.colors[0]) || "";
-  activeQty = 1;
+  activeExcludedColors = [];
+  activeSets = 1;
   renderProductModal();
 }
 
 function renderProductModal() {
   const p = activeProduct;
   const gallery = p.gallery && p.gallery.length ? p.gallery : [p.mainImage];
+  const hasColors = p.colors && p.colors.length > 0;
+  const includedColors = hasColors ? p.colors.filter(c => !activeExcludedColors.includes(c)) : [];
+  const setSize = hasColors ? includedColors.length : 1;
+  const totalPcs = setSize * activeSets;
+
   $("productOverlay").innerHTML = `
     <div class="modal">
       <div class="modal-close"><button id="closeProduct">✕</button></div>
@@ -377,21 +395,37 @@ function renderProductModal() {
         <div class="product-title">${escapeHtml(p.sku)}</div>
         ${p.brand ? `<span class="brand-tag" style="color:${brandColor(p.brand)}">${escapeHtml(p.brand)}</span>` : ""}
         <div style="margin-top:14px;">
+        <div class="detail-line"><span>Price</span><b>${p.price ? "₹" + escapeHtml(p.price) + " / pc" : "—"}</b></div>
         <div class="detail-line"><span>Fabric</span><b>${escapeHtml(p.fabric||"—")}</b></div>
         <div class="detail-line"><span>Sizes</span><b>${escapeHtml(p.sizes||"—")}</b></div>
         <div class="detail-line"><span>MOQ</span><b>${escapeHtml(p.moq||"—")}</b></div>
         </div>
-        ${p.colors && p.colors.length ? `
-          <label class="field-label">Color</label>
-          <div class="swatch-row">${p.colors.map(c =>
-            `<button class="swatch ${c===activeColor?"active":""}" data-color="${escapeAttr(c)}">${escapeHtml(c)}</button>`
-          ).join("")}</div>` : ""}
-        <div class="qty-row">
-          <button class="qty-btn" id="qtyMinus">−</button>
-          <span class="qty-val" id="qtyVal">${activeQty}</span>
-          <button class="qty-btn" id="qtyPlus">+</button>
-        </div>
-        <button class="btn-primary" id="addToCartBtn">Add to Request List</button>
+        ${hasColors ? `
+          <label class="field-label">Colours in this set — tap to remove</label>
+          <div class="swatch-row">${p.colors.map(c => {
+            const excluded = activeExcludedColors.includes(c);
+            return `<button class="swatch color-chip ${excluded ? "excluded" : "active"}" data-color="${escapeAttr(c)}">${excluded ? "✕ " : "✓ "}${escapeHtml(c)}</button>`;
+          }).join("")}</div>
+          <div class="set-summary">
+            <div><span>Colours selected</span><b>${includedColors.length} / ${p.colors.length}</b></div>
+            <div><span>1 Set =</span><b>${setSize} pcs</b></div>
+            <div><span>Sets</span><b id="setsVal">${activeSets}</b></div>
+            <div class="set-summary-total"><span>Total</span><b>${totalPcs} pcs</b></div>
+          </div>
+          <div class="qty-row">
+            <button class="qty-btn" id="qtyMinus">−</button>
+            <span class="qty-val" id="qtyVal">${activeSets} Set${activeSets > 1 ? "s" : ""}</span>
+            <button class="qty-btn" id="qtyPlus">+</button>
+          </div>
+        ` : `
+          <div class="qty-row">
+            <button class="qty-btn" id="qtyMinus">−</button>
+            <span class="qty-val" id="qtyVal">${activeSets} pcs</span>
+            <button class="qty-btn" id="qtyPlus">+</button>
+          </div>
+        `}
+        <button class="btn-primary" id="addToCartBtn" ${hasColors && includedColors.length === 0 ? "disabled" : ""}>Add to Request List</button>
+        ${hasColors && includedColors.length === 0 ? `<p class="error-text">Kam se kam ek colour rakhna zaroori hai.</p>` : ""}
       </div>
     </div>
   `;
@@ -401,11 +435,19 @@ function renderProductModal() {
   $("productOverlay").querySelectorAll(".thumb").forEach(t =>
     t.addEventListener("click", () => { activeImgIdx = Number(t.dataset.idx); renderProductModal(); })
   );
-  $("productOverlay").querySelectorAll(".swatch").forEach(s =>
-    s.addEventListener("click", () => { activeColor = s.dataset.color; renderProductModal(); })
+  $("productOverlay").querySelectorAll(".color-chip").forEach(s =>
+    s.addEventListener("click", () => {
+      const c = s.dataset.color;
+      if (activeExcludedColors.includes(c)) {
+        activeExcludedColors = activeExcludedColors.filter(x => x !== c);
+      } else {
+        activeExcludedColors = [...activeExcludedColors, c];
+      }
+      renderProductModal();
+    })
   );
-  $("qtyMinus").addEventListener("click", () => { activeQty = Math.max(1, activeQty-1); $("qtyVal").textContent = activeQty; });
-  $("qtyPlus").addEventListener("click", () => { activeQty = activeQty+1; $("qtyVal").textContent = activeQty; });
+  $("qtyMinus").addEventListener("click", () => { activeSets = Math.max(1, activeSets-1); renderProductModal(); });
+  $("qtyPlus").addEventListener("click", () => { activeSets = activeSets+1; renderProductModal(); });
   $("addToCartBtn").addEventListener("click", addToCart);
 }
 
@@ -416,8 +458,33 @@ function closeProduct() {
 }
 
 function addToCart() {
-  const text = `Lot No-${activeProduct.sku}${activeColor ? " [Color: " + activeColor + "]" : ""}`;
-  cart.push({ key: Date.now(), sku: activeProduct.sku, color: activeColor, qty: activeQty, text });
+  const p = activeProduct;
+  const hasColors = p.colors && p.colors.length > 0;
+  const includedColors = hasColors ? p.colors.filter(c => !activeExcludedColors.includes(c)) : [];
+  const setSize = hasColors ? includedColors.length : 1;
+  const totalPcs = setSize * activeSets;
+
+  let text;
+  if (hasColors) {
+    const isFullSet = includedColors.length === p.colors.length;
+    const colorsPart = isFullSet
+      ? `Full Set (${p.colors.length} Colours: ${p.colors.join(", ")})`
+      : `${includedColors.length}/${p.colors.length} Colours: ${includedColors.join(", ")} — Removed: ${activeExcludedColors.join(", ")}`;
+    text = `Lot No-${p.sku} — ${colorsPart} — ${activeSets} Set${activeSets > 1 ? "s" : ""} x ${setSize} pcs`;
+  } else {
+    text = `Lot No-${p.sku} — Qty: ${activeSets} pcs`;
+  }
+
+  cart.push({
+    key: Date.now(),
+    sku: p.sku,
+    includedColors,
+    excludedColors: [...activeExcludedColors],
+    sets: activeSets,
+    setSize,
+    totalPcs,
+    text
+  });
   updateCartBadge();
   showToast("Added to your request list");
   closeProduct();
@@ -459,7 +526,7 @@ function renderCartModal(orderId) {
         <div class="cart-item">
           <div>
             <div style="font-weight:600;font-size:13.5px;">${escapeHtml(c.text)}</div>
-            <div class="card-meta">Qty: ${c.qty}</div>
+            <div class="card-meta">Total: ${c.totalPcs} pcs</div>
           </div>
           <button class="cart-item-remove" data-key="${c.key}">Remove</button>
         </div>
@@ -521,7 +588,7 @@ async function submitOrder() {
         action: "submitOrder",
         payload: {
           mobile, firmName, remarks,
-          items: cart.map(c => ({ text: c.text, qty: c.qty }))
+          items: cart.map(c => ({ text: c.text, qty: c.totalPcs }))
         }
       })
     });
