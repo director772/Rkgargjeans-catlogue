@@ -6,78 +6,156 @@
 <title>RK Garg Jeans — Wholesale Catalog</title>
 <meta property="og:title" content="RK Garg Jeans — Wholesale Catalog" />
 <meta property="og:description" content="Wholesale catalog for G'Sir, LeBoys & Gargline." />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#10141c;--panel:#171d29;--panel-2:#1e2635;--denim:#2c4a6e;--denim-light:#4c7aa8;
---stitch:#d4a24c;--stitch-dim:#8a6a30;--text:#eef1f6;--text-muted:#8f9bb0;--border:#29334a;
---danger:#c65b4e;--ok:#5fa87a;--radius:10px;}
+:root{
+  --bg:#0c0f16; --bg-2:#11151f;
+  --panel:#171c28; --panel-2:#1d2331;
+  --stage:#efe9dc;               /* warm off-white "spotlight" stage behind product photos */
+  --denim:#3d6c9c; --denim-light:#6fa0d4;
+  --brass:#cc9e56; --brass-dim:#7d5f2f;
+  --gsir:#6fa0d4; --leboys:#cc9e56; --gargline:#8fa66a;
+  --text:#f2f0e8; --text-muted:#8d97ab; --text-dim:#5d6479;
+  --border:#262d3f; --border-light:#333c54;
+  --danger:#d97361; --ok:#6fb98a;
+  --radius:12px;
+}
 *{box-sizing:border-box;}
-html,body{margin:0;padding:0;background:var(--bg);color:var(--text);
-font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;}
+html,body{margin:0;padding:0;background:
+  radial-gradient(1200px 500px at 50% -10%, #16203020, transparent),
+  var(--bg);
+  color:var(--text);
+  font-family:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  -webkit-font-smoothing:antialiased;
+}
 button{font-family:inherit;cursor:pointer;}
-.header{position:sticky;top:0;z-index:20;background:var(--panel);border-bottom:1px dashed var(--stitch-dim);padding:14px 18px;}
-.header-row{display:flex;align-items:center;justify-content:space-between;max-width:1200px;margin:0 auto;}
-.brandmark{display:flex;flex-direction:column;line-height:1.1;}
-.brandmark .eyebrow{font-size:11px;letter-spacing:.14em;color:var(--stitch);text-transform:uppercase;}
-.brandmark .name{font-size:19px;font-weight:700;}
-.cart-btn{position:relative;background:var(--denim);color:var(--text);border:1px solid var(--denim-light);
-border-radius:var(--radius);padding:9px 16px;font-size:14px;font-weight:600;}
-.cart-btn .badge{position:absolute;top:-8px;right:-8px;background:var(--stitch);color:#241a04;font-size:11px;
-font-weight:800;border-radius:999px;min-width:20px;height:20px;display:flex;align-items:center;justify-content:center;padding:0 4px;}
-.filters{max-width:1200px;margin:14px auto 0;padding:0 18px 14px;display:flex;gap:20px;flex-wrap:wrap;}
-.filter-group{display:flex;flex-direction:column;gap:6px;}
-.filter-label{font-size:10px;text-transform:uppercase;letter-spacing:.1em;color:var(--text-muted);}
-.pill-row{display:flex;gap:6px;flex-wrap:wrap;}
-.pill{border:1px solid var(--border);background:var(--panel-2);color:var(--text-muted);border-radius:999px;
-padding:6px 13px;font-size:12.5px;font-weight:500;}
-.pill.active{background:var(--denim);border-color:var(--denim-light);color:var(--text);}
-.container{max-width:1200px;margin:0 auto;padding:20px 18px 80px;}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:14px;}
+h1,h2{font-family:"Oswald",sans-serif;}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
+@keyframes popIn{from{opacity:0;transform:scale(.97) translateY(8px);}to{opacity:1;transform:scale(1) translateY(0);}}
+@keyframes fadeIn{from{opacity:0;}to{opacity:1;}}
+
+/* ---------- header ---------- */
+.header{position:sticky;top:0;z-index:20;background:rgba(23,28,40,.9);backdrop-filter:blur(10px);
+border-bottom:1px solid var(--border);padding:16px 20px;}
+.header-row{display:flex;align-items:center;justify-content:space-between;max-width:1240px;margin:0 auto;}
+.brandmark{display:flex;align-items:center;gap:11px;line-height:1.1;}
+.brandmark .rivet{width:34px;height:34px;border-radius:9px;background:linear-gradient(155deg,var(--denim),#274361);
+display:flex;align-items:center;justify-content:center;font-family:"Oswald";font-weight:700;font-size:15px;
+color:var(--brass);border:1px solid var(--border-light);flex-shrink:0;}
+.brandmark .lockup{display:flex;flex-direction:column;}
+.brandmark .eyebrow{font-size:10.5px;letter-spacing:.16em;color:var(--brass);text-transform:uppercase;font-weight:600;}
+.brandmark .name{font-family:"Oswald";font-size:19px;font-weight:600;letter-spacing:.01em;}
+.cart-btn{position:relative;background:var(--panel-2);color:var(--text);border:1px solid var(--border-light);
+border-radius:999px;padding:10px 18px;font-size:13.5px;font-weight:600;letter-spacing:.02em;transition:border-color .15s,background .15s;}
+.cart-btn:hover{border-color:var(--denim-light);background:#232a3c;}
+.cart-btn .badge{position:absolute;top:-7px;right:-7px;background:var(--brass);color:#231a08;font-size:11px;
+font-weight:800;border-radius:999px;min-width:20px;height:20px;display:flex;align-items:center;justify-content:center;padding:0 4px;
+box-shadow:0 0 0 3px var(--bg-2);}
+
+/* ---------- filters ---------- */
+.filters{max-width:1240px;margin:18px auto 0;padding:0 20px 16px;display:flex;gap:26px;flex-wrap:wrap;}
+.filter-group{display:flex;flex-direction:column;gap:8px;}
+.filter-label{font-size:10px;text-transform:uppercase;letter-spacing:.14em;color:var(--text-dim);font-weight:600;}
+.pill-row{display:flex;gap:7px;flex-wrap:wrap;}
+.pill{border:1px solid var(--border-light);background:var(--panel);color:var(--text-muted);border-radius:999px;
+padding:7px 15px;font-size:12.5px;font-weight:500;transition:all .15s;}
+.pill:hover{border-color:var(--denim-light);color:var(--text);}
+.pill.active{background:var(--denim);border-color:var(--denim-light);color:#fff;font-weight:600;}
+
+/* ---------- grid ---------- */
+.container{max-width:1240px;margin:0 auto;padding:22px 20px 90px;}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:20px;}
 .card{background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;
-text-align:left;padding:0;color:inherit;}
-.card-img{width:100%;aspect-ratio:3/4;background:var(--panel-2);object-fit:cover;display:block;}
-.card-body{padding:10px 12px 12px;}
-.card-sku{font-size:13px;font-weight:700;}
-.card-meta{font-size:11.5px;color:var(--text-muted);margin-top:3px;}
-.card-moq{display:inline-block;margin-top:7px;font-size:10.5px;border:1px solid var(--stitch-dim);
-color:var(--stitch);border-radius:5px;padding:2px 6px;}
+text-align:left;padding:0;color:inherit;transition:transform .18s ease,border-color .18s,box-shadow .18s;
+animation:fadeUp .35s ease backwards;}
+.card:hover{transform:translateY(-4px);border-color:var(--denim-light);box-shadow:0 14px 30px -12px rgba(0,0,0,.55);}
+.card-img-wrap{position:relative;background:var(--stage);}
+.card-img{width:100%;aspect-ratio:4/3;object-fit:contain;display:block;padding:10px;}
+.card-rivet{position:absolute;top:9px;left:9px;width:8px;height:8px;border-radius:50%;
+background:var(--brass);opacity:.85;box-shadow:0 0 0 2px rgba(0,0,0,.15);}
+.card-stitch{border-top:1px dashed var(--border-light);}
+.card-body{padding:12px 14px 15px;}
+.card-sku{font-family:"Oswald";font-size:14px;font-weight:600;letter-spacing:.01em;}
+.card-meta-row{display:flex;align-items:center;gap:6px;margin-top:6px;flex-wrap:wrap;}
+.brand-tag{font-size:10px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;padding:2px 8px;
+border-radius:5px;background:rgba(255,255,255,.06);}
+.category-txt{font-size:11.5px;color:var(--text-muted);}
+.card-moq{display:inline-flex;align-items:center;gap:4px;margin-top:9px;font-size:10.5px;font-weight:600;
+color:var(--brass);letter-spacing:.02em;}
+.card-moq::before{content:"";width:5px;height:5px;border-radius:50%;background:var(--brass);}
+
 .state-msg{text-align:center;color:var(--text-muted);padding:60px 20px;font-size:14px;}
-.gate{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;}
-.gate-card{background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:32px 28px;max-width:380px;width:100%;}
-.gate-eyebrow{font-size:11px;letter-spacing:.14em;color:var(--stitch);text-transform:uppercase;margin-bottom:6px;}
-.gate-title{font-size:22px;font-weight:700;margin:0 0 6px;}
-.gate-sub{font-size:13.5px;color:var(--text-muted);margin:0 0 22px;}
-input,textarea{width:100%;background:var(--panel-2);border:1px solid var(--border);color:var(--text);
-border-radius:8px;padding:11px 12px;font-size:14px;outline:none;}
-input:focus,textarea:focus{border-color:var(--denim-light);}
-label.field-label{display:block;font-size:11.5px;color:var(--text-muted);margin:12px 0 6px;}
-.btn-primary{width:100%;background:var(--denim);border:1px solid var(--denim-light);color:var(--text);
-border-radius:8px;padding:12px;font-size:14.5px;font-weight:700;margin-top:18px;}
-.btn-primary:disabled{opacity:.5;cursor:not-allowed;}
-.error-text{color:var(--danger);font-size:12.5px;margin-top:10px;}
-.overlay{position:fixed;inset:0;background:rgba(6,8,12,.72);z-index:50;display:flex;align-items:flex-end;justify-content:center;}
+
+/* ---------- gate ---------- */
+.gate{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;position:relative;overflow:hidden;}
+.gate::before{content:"";position:absolute;inset:0;background:
+  radial-gradient(700px 400px at 20% 10%, rgba(61,108,156,.16), transparent),
+  radial-gradient(600px 350px at 85% 90%, rgba(204,158,86,.10), transparent);pointer-events:none;}
+.gate-card{position:relative;background:var(--panel);border:1px solid var(--border);border-radius:18px;
+padding:36px 30px;max-width:390px;width:100%;box-shadow:0 30px 60px -25px rgba(0,0,0,.6);animation:popIn .4s ease;}
+.gate-rivet{width:44px;height:44px;border-radius:12px;background:linear-gradient(155deg,var(--denim),#274361);
+display:flex;align-items:center;justify-content:center;font-family:"Oswald";font-weight:700;font-size:19px;
+color:var(--brass);border:1px solid var(--border-light);margin-bottom:18px;}
+.gate-eyebrow{font-size:11px;letter-spacing:.16em;color:var(--brass);text-transform:uppercase;margin-bottom:7px;font-weight:600;}
+.gate-title{font-size:25px;font-weight:600;margin:0 0 8px;letter-spacing:.005em;}
+.gate-sub{font-size:13.5px;color:var(--text-muted);margin:0 0 24px;line-height:1.5;}
+.gate-est{font-size:11px;color:var(--text-dim);margin-top:22px;text-align:center;letter-spacing:.03em;}
+
+input,textarea{width:100%;background:var(--panel-2);border:1px solid var(--border-light);color:var(--text);
+border-radius:9px;padding:12px 13px;font-size:14px;outline:none;transition:border-color .15s,box-shadow .15s;}
+input:focus,textarea:focus{border-color:var(--denim-light);box-shadow:0 0 0 3px rgba(111,160,212,.15);}
+label.field-label{display:block;font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--text-dim);
+font-weight:600;margin:14px 0 7px;}
+.btn-primary{width:100%;background:linear-gradient(155deg,var(--denim),#2d5279);border:1px solid var(--denim-light);
+color:#fff;border-radius:9px;padding:13px;font-size:14.5px;font-weight:600;letter-spacing:.01em;margin-top:20px;
+transition:filter .15s,transform .1s;}
+.btn-primary:hover{filter:brightness(1.1);}
+.btn-primary:active{transform:scale(.99);}
+.btn-primary:disabled{opacity:.5;cursor:not-allowed;filter:none;}
+.error-text{color:var(--danger);font-size:12.5px;margin-top:11px;line-height:1.5;}
+
+/* ---------- overlays / modal ---------- */
+.overlay{position:fixed;inset:0;background:rgba(6,7,11,.78);backdrop-filter:blur(2px);z-index:50;
+display:flex;align-items:flex-end;justify-content:center;animation:fadeIn .18s ease;}
 @media(min-width:720px){.overlay{align-items:center;}}
-.modal{background:var(--panel);border:1px solid var(--border);border-radius:16px 16px 0 0;width:100%;
-max-width:480px;max-height:92vh;overflow-y:auto;}
-@media(min-width:720px){.modal{border-radius:16px;}}
-.modal-close{position:sticky;top:0;display:flex;justify-content:flex-end;padding:10px 12px 0;background:var(--panel);z-index:2;}
-.modal-close button{background:var(--panel-2);border:1px solid var(--border);color:var(--text);border-radius:999px;width:30px;height:30px;}
-.gallery-main{width:100%;aspect-ratio:3/4;object-fit:cover;background:var(--panel-2);}
-.thumb-row{display:flex;gap:6px;padding:10px 14px;overflow-x:auto;}
-.thumb{width:52px;height:68px;object-fit:cover;border-radius:6px;border:1px solid var(--border);flex-shrink:0;}
-.thumb.active{border-color:var(--stitch);}
-.modal-body{padding:4px 18px 20px;}
-.swatch-row{display:flex;gap:7px;flex-wrap:wrap;margin-top:6px;}
-.swatch{border:1px solid var(--border);background:var(--panel-2);color:var(--text-muted);border-radius:7px;padding:6px 11px;font-size:12.5px;}
-.swatch.active{border-color:var(--stitch);color:var(--stitch);}
-.qty-row{display:flex;align-items:center;gap:12px;margin-top:18px;}
-.qty-btn{width:34px;height:34px;border-radius:8px;border:1px solid var(--border);background:var(--panel-2);color:var(--text);font-size:17px;font-weight:700;}
-.qty-val{font-size:16px;font-weight:700;min-width:24px;text-align:center;}
-.detail-line{display:flex;justify-content:space-between;font-size:13px;color:var(--text-muted);padding:5px 0;border-bottom:1px solid var(--border);}
+.modal{background:var(--panel);border:1px solid var(--border);border-radius:20px 20px 0 0;width:100%;
+max-width:480px;max-height:92vh;overflow-y:auto;animation:popIn .25s cubic-bezier(.2,.8,.3,1);}
+@media(min-width:720px){.modal{border-radius:18px;max-width:660px;}}
+.modal-close{position:sticky;top:0;display:flex;justify-content:flex-end;padding:12px 12px 0;
+background:linear-gradient(var(--panel),var(--panel) 70%,transparent);z-index:2;}
+.modal-close button{background:var(--panel-2);border:1px solid var(--border-light);color:var(--text);
+border-radius:999px;width:32px;height:32px;font-size:14px;transition:border-color .15s;}
+.modal-close button:hover{border-color:var(--denim-light);}
+.gallery-stage{background:var(--stage);}
+.gallery-main{width:100%;aspect-ratio:4/3;object-fit:contain;display:block;padding:16px;}
+.thumb-row{display:flex;gap:9px;padding:14px 20px;overflow-x:auto;background:var(--panel);}
+.thumb{width:58px;height:58px;object-fit:contain;background:var(--stage);border-radius:8px;
+border:2px solid var(--border-light);flex-shrink:0;padding:4px;transition:border-color .15s;}
+.thumb.active{border-color:var(--brass);}
+.modal-body{padding:8px 24px 26px;}
+.product-title{font-family:"Oswald";font-size:20px;font-weight:600;margin:6px 0 2px;}
+.swatch-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px;}
+.swatch{border:1px solid var(--border-light);background:var(--panel-2);color:var(--text-muted);
+border-radius:8px;padding:7px 13px;font-size:12.5px;font-weight:500;transition:all .15s;}
+.swatch:hover{border-color:var(--denim-light);}
+.swatch.active{border-color:var(--brass);color:var(--brass);background:rgba(204,158,86,.08);font-weight:600;}
+.qty-row{display:flex;align-items:center;gap:14px;margin-top:22px;}
+.qty-btn{width:38px;height:38px;border-radius:10px;border:1px solid var(--border-light);background:var(--panel-2);
+color:var(--text);font-size:18px;font-weight:700;transition:border-color .15s;}
+.qty-btn:hover{border-color:var(--denim-light);}
+.qty-val{font-size:17px;font-weight:700;min-width:26px;text-align:center;font-family:"Oswald";}
+.detail-line{display:flex;justify-content:space-between;font-size:13px;color:var(--text-muted);
+padding:8px 0;border-bottom:1px dashed var(--border);}
 .detail-line b{color:var(--text);font-weight:600;}
-.cart-item{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;padding:10px 0;border-bottom:1px solid var(--border);}
-.cart-item-remove{background:none;border:none;color:var(--danger);font-size:12px;}
-.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--ok);color:#0c1f14;
-font-weight:700;font-size:13.5px;padding:12px 20px;border-radius:999px;z-index:60;}
+.cart-item{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;padding:12px 0;
+border-bottom:1px dashed var(--border);}
+.cart-item-remove{background:none;border:none;color:var(--danger);font-size:12px;font-weight:600;}
+.toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%);background:var(--ok);color:#0c1f14;
+font-weight:700;font-size:13.5px;padding:13px 22px;border-radius:999px;z-index:60;
+box-shadow:0 12px 30px -10px rgba(0,0,0,.5);animation:popIn .2s ease;}
 .hidden{display:none !important;}
 </style>
 </head>
@@ -90,6 +168,7 @@ font-weight:700;font-size:13.5px;padding:12px 20px;border-radius:999px;z-index:6
 
 <div id="gate" class="gate">
   <form class="gate-card" id="gateForm">
+    <div class="gate-rivet">RG</div>
     <div class="gate-eyebrow">RK Garg Jeans</div>
     <h1 class="gate-title">Wholesale Catalog</h1>
     <p class="gate-sub">G'Sir · LeBoys · Gargline — apna registered mobile number daalein</p>
@@ -97,6 +176,7 @@ font-weight:700;font-size:13.5px;padding:12px 20px;border-radius:999px;z-index:6
     <input type="tel" inputmode="numeric" placeholder="98XXXXXXXX" id="gateMobile" required />
     <button class="btn-primary" type="submit" id="gateBtn">Enter Catalog</button>
     <p class="error-text hidden" id="gateError"></p>
+    <p class="gate-est">Manufacturing since 1989 · Delhi</p>
   </form>
 </div>
 
@@ -104,8 +184,11 @@ font-weight:700;font-size:13.5px;padding:12px 20px;border-radius:999px;z-index:6
   <header class="header">
     <div class="header-row">
       <div class="brandmark">
-        <span class="eyebrow">RK Garg Jeans</span>
-        <span class="name">Wholesale Catalog</span>
+        <div class="rivet">RG</div>
+        <div class="lockup">
+          <span class="eyebrow">RK Garg Jeans</span>
+          <span class="name">Wholesale Catalog</span>
+        </div>
       </div>
       <button class="cart-btn" id="cartOpenBtn">Request List <span class="badge hidden" id="cartBadge">0</span></button>
     </div>
@@ -147,6 +230,10 @@ let mobile = "";
 let firmName = "";
 
 const $ = (id) => document.getElementById(id);
+
+// Distinct accent per brand — keeps the grid scannable at a glance
+const BRAND_COLORS = { "G'Sir": "var(--gsir)", "LeBoys": "var(--leboys)", "Gargline": "var(--gargline)" };
+function brandColor(brand) { return BRAND_COLORS[brand] || "var(--denim-light)"; }
 
 // ---------- restore session ----------
 const saved = localStorage.getItem("rkg_session");
@@ -242,12 +329,19 @@ function renderGrid() {
     (categoryFilter === "All" || p.category === categoryFilter)
   );
   $("emptyMsg").classList.toggle("hidden", filtered.length !== 0);
-  $("grid").innerHTML = filtered.map(p => `
-    <button class="card" data-sku="${escapeAttr(p.sku)}">
-      <img class="card-img" src="${escapeAttr(p.mainImage || "")}" alt="${escapeAttr(p.sku)}" loading="lazy" />
+  $("grid").innerHTML = filtered.map((p, i) => `
+    <button class="card" data-sku="${escapeAttr(p.sku)}" style="animation-delay:${Math.min(i,10) * 30}ms">
+      <div class="card-img-wrap">
+        <span class="card-rivet"></span>
+        <img class="card-img" src="${escapeAttr(p.mainImage || "")}" alt="${escapeAttr(p.sku)}" loading="lazy" />
+      </div>
+      <div class="card-stitch"></div>
       <div class="card-body">
         <div class="card-sku">${escapeHtml(p.sku)}</div>
-        <div class="card-meta">${escapeHtml(p.brand || "")} ${p.category ? "· " + escapeHtml(p.category) : ""}</div>
+        <div class="card-meta-row">
+          ${p.brand ? `<span class="brand-tag" style="color:${brandColor(p.brand)}">${escapeHtml(p.brand)}</span>` : ""}
+          ${p.category ? `<span class="category-txt">${escapeHtml(p.category)}</span>` : ""}
+        </div>
         ${p.moq ? `<span class="card-moq">MOQ ${escapeHtml(p.moq)}</span>` : ""}
       </div>
     </button>
@@ -273,16 +367,20 @@ function renderProductModal() {
   $("productOverlay").innerHTML = `
     <div class="modal">
       <div class="modal-close"><button id="closeProduct">✕</button></div>
-      <img class="gallery-main" src="${escapeAttr(gallery[activeImgIdx] || "")}" alt="${escapeAttr(p.sku)}" />
+      <div class="gallery-stage">
+        <img class="gallery-main" src="${escapeAttr(gallery[activeImgIdx] || "")}" alt="${escapeAttr(p.sku)}" />
+      </div>
       ${gallery.length > 1 ? `<div class="thumb-row">${gallery.map((g,i) =>
         `<img src="${escapeAttr(g)}" class="thumb ${i===activeImgIdx?"active":""}" data-idx="${i}" />`
       ).join("")}</div>` : ""}
       <div class="modal-body">
-        <div class="detail-line"><span>SKU</span><b>${escapeHtml(p.sku)}</b></div>
-        <div class="detail-line"><span>Brand</span><b>${escapeHtml(p.brand||"")}</b></div>
+        <div class="product-title">${escapeHtml(p.sku)}</div>
+        ${p.brand ? `<span class="brand-tag" style="color:${brandColor(p.brand)}">${escapeHtml(p.brand)}</span>` : ""}
+        <div style="margin-top:14px;">
         <div class="detail-line"><span>Fabric</span><b>${escapeHtml(p.fabric||"—")}</b></div>
         <div class="detail-line"><span>Sizes</span><b>${escapeHtml(p.sizes||"—")}</b></div>
         <div class="detail-line"><span>MOQ</span><b>${escapeHtml(p.moq||"—")}</b></div>
+        </div>
         ${p.colors && p.colors.length ? `
           <label class="field-label">Color</label>
           <div class="swatch-row">${p.colors.map(c =>
