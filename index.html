@@ -410,7 +410,7 @@ function renderProductModal() {
             <div><span>Colours selected</span><b>${includedColors.length} / ${p.colors.length}</b></div>
             <div><span>1 Set =</span><b>${setSize} pcs</b></div>
             <div><span>Sets</span><b id="setsVal">${activeSets}</b></div>
-            <div class="set-summary-total"><span>Total</span><b>${totalPcs} pcs</b></div>
+            <div class="set-summary-total"><span>Total</span><b>${totalPcs} Set${totalPcs > 1 ? "s" : ""}</b></div>
           </div>
           <div class="qty-row">
             <button class="qty-btn" id="qtyMinus">−</button>
@@ -526,7 +526,7 @@ function renderCartModal(orderId) {
         <div class="cart-item">
           <div>
             <div style="font-weight:600;font-size:13.5px;">${escapeHtml(c.text)}</div>
-            <div class="card-meta">Total: ${c.totalPcs} pcs</div>
+            <div class="card-meta">Total: ${c.totalPcs} Set${c.totalPcs > 1 ? "s" : ""}</div>
           </div>
           <button class="cart-item-remove" data-key="${c.key}">Remove</button>
         </div>
